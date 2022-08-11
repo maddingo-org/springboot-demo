@@ -7,7 +7,7 @@ import lombok.Data;
 public class Invoice {
 
     @JsonProperty
-    private Long invoiceNo;
+    private int invoiceNo;
 
     @JsonProperty
     private String name;
@@ -29,10 +29,4 @@ public class Invoice {
 
     @JsonProperty
     private Double totalAmount;
-
-    @JsonProperty
-    private boolean PO;
-
-    @JsonProperty
-    private int PurchaseOrderNumber;
 }

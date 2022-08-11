@@ -1,6 +1,7 @@
 package no.lyse.platform.demo;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,31 +11,27 @@ import java.util.List;
 @Slf4j
 public class InvoiceController {
 
-    @Value("${app.name}")
-    private String appName;
-
-    @Value("${app.version}")
-    private String appVersion;
-
-    @GetMapping("/version")
-    public String getAppDetails() {
-        return appName + " - " + appVersion;
-    }
+    @Autowired
+    public InvoiceService iService;
 
     @GetMapping("/invoices")
     public List<Invoice> getInvoices() {
-        return List.of(new Invoice());
+        if (iService == null) {
+            iService = new InvoiceServiceImpl();
+        }
+        return this.iService.getInvoices();
     }
 
     @GetMapping("/invoices/{invoiceNo}")
-    public Invoice getInvoice(@PathVariable Long invoiceNo) {
-        Invoice invoice = new Invoice();
-        invoice.setInvoiceNo(invoiceNo);
-        return invoice;
+    public Invoice getInvoice(@PathVariable int invoiceNo) {
+        if (iService == null) {
+            iService = new InvoiceServiceImpl();
+        }
+        return iService.getInvoice(invoiceNo);
     }
 
     @DeleteMapping("/invoices/{invoiceNo}")
-    public String deleteInvoice(@PathVariable Long invoiceNo) {
+    public String deleteInvoice(@PathVariable int invoiceNo) {
         return "Deleting invoice: " + invoiceNo;
     }
 
